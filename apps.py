@@ -7,7 +7,7 @@ import os
 # --- 1. PAGE CONFIG ---
 st.set_page_config(page_title="Cyberbros2013", page_icon="🤖", layout="wide")
 
-# --- 2. THE BACKGROUND & STYLE (NO CONFIG.TOML NEEDED) ---
+# --- 2. THE BACKGROUND & STYLE (REPLACES CONFIG.TOML) ---
 st.markdown("""
     <style>
     /* Gradient Background */
@@ -30,13 +30,13 @@ st.markdown("""
         text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
     }
 
-    /* Text Readability */
-    p, li, span {
+    /* Text Color */
+    p, li, span, label {
         font-weight: 500;
         color: #e6edf3 !important;
     }
 
-    /* Clean UI */
+    /* Hide Streamlit elements */
     header {background: transparent !important;}
     footer {display: none !important;}
     </style>
@@ -45,11 +45,13 @@ st.markdown("""
 # --- 3. ASSET LOADING ---
 def load_lottie(path):
     if os.path.exists(path):
-        with open(path, "r") as f:
-            return json.load(f)
+        try:
+            with open(path, "r") as f:
+                return json.load(f)
+        except:
+            return None
     return None
 
-# Load the robot - make sure robot.json is in the main folder
 lottie_robot = load_lottie("robot.json")
 
 # --- 4. NAVIGATION ---
@@ -73,6 +75,7 @@ if selected == "Home":
     with col_left:
         st.header("Innovation in Motion")
         st.write("Cyberbros2013 is building the future. From Ubuntu ricing to autonomous robotics, we explore it all.")
+        st.write("[Visit Youtube Channel >](https://www.youtube.com/@cyberbros2013)")
     
     with col_right:
         if lottie_robot:
@@ -82,39 +85,40 @@ if selected == "Home":
     st.header("Project Gallery")
     c1, c2 = st.columns(2)
     
-    # IMAGE 1 CHECK
+    # --- IMAGE 1 WITH CRASH PROTECTION ---
     with c1:
-        if os.path.exists("images/download.jpeg"):
-            st.image("images/download.jpeg", caption="Robotics Lab")
+        img1 = "images/download.jpeg"
+        if os.path.exists(img1):
+            st.image(img1, caption="Robotics Lab", use_container_width=True)
         else:
-            st.warning("⚠️ 'images/download.jpeg' not found. Check if the filename is correct on GitHub!")
+            st.error(f"⚠️ {img1} not found on GitHub. Check folder/name!")
 
-    # IMAGE 2 CHECK
+    # --- IMAGE 2 WITH CRASH PROTECTION ---
     with c2:
-        if os.path.exists("images/images.jpeg"):
-            st.image("images/images.jpeg", caption="Software Tutorials")
+        img2 = "images/images.jpeg"
+        if os.path.exists(img2):
+            st.image(img2, caption="Software Tutorials", use_container_width=True)
         else:
-            st.warning("⚠️ 'images/images.jpeg' not found. Check if the filename is correct on GitHub!")
+            st.error(f"⚠️ {img2} not found on GitHub. Check folder/name!")
 
 elif selected == "News":
     st.header("LATEST UPDATES 📰")
     st.info("🚀 **Project Rover:** Chassis assembly is complete. Testing now in Sharjah.")
+    st.success("💻 **Ubuntu Ricing:** New macOS-style transformation guide coming soon.")
 
 elif selected == "YouTube":
     st.header("CYBERBROS2013 VIDEOS 📺")
-    # Replace with your actual video link
-    st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+    st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ") # Rickroll for now, replace later!
 
 elif selected == "Contact":
     st.header("GET IN TOUCH 📩")
-    st.write("Email us for collaborations or build questions!")
-    # FormSubmit setup
+    st.write("Connect with Jeremie for collaborations!")
     contact_form = """
     <form action="https://formsubmit.co/your-email@gmail.com" method="POST">
-        <input type="text" name="name" placeholder="Your Name" required style="width:100%; margin-bottom:10px;">
-        <input type="email" name="email" placeholder="Your Email" required style="width:100%; margin-bottom:10px;">
-        <textarea name="message" placeholder="Message" style="width:100%; height:100px;"></textarea>
-        <button type="submit" style="background:#00f2ff; color:#0a0b10; border:none; padding:10px 20px; font-weight:bold;">Send</button>
+        <input type="text" name="name" placeholder="Your Name" required style="width:100%; margin-bottom:10px; background:#161b22; color:white; border:1px solid #00f2ff;">
+        <input type="email" name="email" placeholder="Your Email" required style="width:100%; margin-bottom:10px; background:#161b22; color:white; border:1px solid #00f2ff;">
+        <textarea name="message" placeholder="Message" style="width:100%; height:100px; background:#161b22; color:white; border:1px solid #00f2ff;"></textarea>
+        <button type="submit" style="background:#00f2ff; color:#0a0b10; border:none; padding:10px 20px; font-weight:bold; cursor:pointer;">Send</button>
     </form>
     """
     st.markdown(contact_form, unsafe_allow_html=True)
