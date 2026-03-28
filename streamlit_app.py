@@ -97,17 +97,17 @@ if selected == "Home":
     st.header("Project Gallery")
     c1, c2 = st.columns(2)
     
-    # Image 1 Check
+    # Image 1 Check - FIXED WIDTH
     with c1:
         if os.path.exists("images/download.jpeg"):
-            st.image("images/download.jpeg", caption="Robotics Lab", width=None) # width=None lets it be responsive
+            st.image("images/download.jpeg", caption="Robotics Lab", width="stretch")
         else:
             st.warning("⚠️ images/download.jpeg not found.")
 
-    # Image 2 Check
+    # Image 2 Check - FIXED WIDTH
     with c2:
         if os.path.exists("images/images.jpeg"):
-            st.image("images/images.jpeg", caption="Software Tutorials", width=None)
+            st.image("images/images.jpeg", caption="Software Tutorials", width="stretch")
         else:
             st.warning("⚠️ images/images.jpeg not found.")
 
@@ -118,7 +118,7 @@ elif selected == "News":
 
 elif selected == "YouTube":
     st.header("OUR VIDEOS 📺")
-    st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ") # Replace with your link
+    st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
     st.write("### Newest Upload: Robotics 101")
 
 elif selected == "Contact":
