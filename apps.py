@@ -4,152 +4,117 @@ from streamlit_option_menu import option_menu
 import json
 import os
 
-# --- 1. PAGE CONFIG (Must be the very first Streamlit command) ---
-st.set_page_config(page_title="Cyberbros2013 Tech site", page_icon="🤖", layout="wide")
+# --- 1. PAGE CONFIG ---
+st.set_page_config(page_title="Cyberbros2013", page_icon="🤖", layout="wide")
 
-# --- 2. ATOMIC CSS: FORCE GRADIENT & BOLD TEXT ---
-# This overrides Streamlit's default theme directly from the code.
+# --- 2. THE BACKGROUND & STYLE (NO CONFIG.TOML NEEDED) ---
 st.markdown("""
     <style>
-    /* Force the background gradient on the entire app */
+    /* Gradient Background */
     .stApp {
         background: linear-gradient(135deg, #0a0b10 0%, #1a0b2e 50%, #001a2e 100%) !important;
         background-attachment: fixed !important;
     }
-
-    /* Make the main containers transparent so the gradient shows through */
-    .stMain, .stAppViewContainer, .stHeader, .stMainBlockContainer {
+    
+    /* Transparent Containers */
+    .stMain, .stHeader, .stAppViewContainer, .stMainBlockContainer {
         background-color: transparent !important;
     }
 
-    /* Extra Bold Cyber-Cyan Headers */
+    /* Bold Electric Headers */
     h1, h2, h3 {
         font-weight: 900 !important;
-        font-family: 'Inter', 'Segoe UI', sans-serif;
         color: #00f2ff !important;
         text-transform: uppercase;
         letter-spacing: 1px;
         text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
     }
 
-    /* Clean white/grey text for readability */
-    p, li, span, label {
+    /* Text Readability */
+    p, li, span {
         font-weight: 500;
         color: #e6edf3 !important;
     }
 
-    /* Clean up UI elements */
+    /* Clean UI */
     header {background: transparent !important;}
     footer {display: none !important;}
-    
-    /* Custom Styling for the Contact Form inputs */
-    input, textarea {
-        background-color: #161b22 !important;
-        color: white !important;
-        border: 1px solid #00f2ff !important;
-    }
     </style>
     """, unsafe_allow_html=True)
 
-# --- 3. LOAD ASSETS WITH SAFETY CHECKS ---
-def load_lottiefile(filepath: str):
-    if os.path.exists(filepath):
-        try:
-            with open(filepath, "r") as f:
-                return json.load(f)
-        except Exception:
-            return None
+# --- 3. ASSET LOADING ---
+def load_lottie(path):
+    if os.path.exists(path):
+        with open(path, "r") as f:
+            return json.load(f)
     return None
 
-lottie_robot = load_lottiefile("robot.json")
+# Load the robot - make sure robot.json is in the main folder
+lottie_robot = load_lottie("robot.json")
 
-# --- 4. NAVIGATION BAR ---
+# --- 4. NAVIGATION ---
 selected = option_menu(
     menu_title=None, 
     options=["Home", "News", "YouTube", "Contact"], 
     icons=["house", "newspaper", "play-btn", "envelope"], 
-    menu_icon="cast", 
-    default_index=0, 
     orientation="horizontal",
     styles={
-        "container": {"padding": "0!important", "background-color": "#161b22"},
-        "icon": {"color": "#00f2ff", "font-size": "20px"}, 
-        "nav-link": {"font-size": "18px", "font-weight": "bold", "text-align": "center", "color": "#e6edf3"},
+        "container": {"background-color": "#161b22", "border": "1px solid #00f2ff"},
         "nav-link-selected": {"background-color": "#00f2ff", "color": "#0a0b10"},
     }
 )
 
-# --- 5. PAGE LOGIC ---
+# --- 5. PAGE CONTENT ---
 
-# HOME PAGE
 if selected == "Home":
-    st.subheader("Cyberbros2013 Tech site 🤖")
     st.title("ROBOTIC PROJECTS & TUTORIALS")
-    st.write("Welcome! We share our builds and code to help you innovate.")
-
-    st.write("---")
-    left_column, right_column = st.columns(2)
-    with left_column:
-        st.header("What we do")
-        st.write(
-            """
-            Cyberbros2013 is a robotics-focused platform. We:
-            - **Design** and build real-world robotic systems.
-            - **Explore** Python and Arduino programming.
-            - **Create** tutorials for the next generation of engineers.
-            """
-        )
-        st.write("[Visit Youtube Channel >](https://www.youtube.com/@cyberbros2013)")
-
-    with right_column:
+    col_left, col_right = st.columns(2)
+    
+    with col_left:
+        st.header("Innovation in Motion")
+        st.write("Cyberbros2013 is building the future. From Ubuntu ricing to autonomous robotics, we explore it all.")
+    
+    with col_right:
         if lottie_robot:
-            st_lottie(lottie_robot, height=350, key="robot")
-        else:
-            st.info("Robot animation loading... (Check if robot.json is on GitHub)")
+            st_lottie(lottie_robot, height=300)
 
-    # PROJECT GALLERY WITH CRASH PROTECTION
     st.write("---")
     st.header("Project Gallery")
-    col1, col2 = st.columns(2)
+    c1, c2 = st.columns(2)
     
-    with col1:
+    # IMAGE 1 CHECK
+    with c1:
         if os.path.exists("images/download.jpeg"):
-            st.image("images/download.jpeg", caption="Robotics Lab", use_container_width=True)
+            st.image("images/download.jpeg", caption="Robotics Lab")
         else:
-            st.error("Missing file: images/download.jpeg")
+            st.warning("⚠️ 'images/download.jpeg' not found. Check if the filename is correct on GitHub!")
 
-    with col2:
+    # IMAGE 2 CHECK
+    with c2:
         if os.path.exists("images/images.jpeg"):
-            st.image("images/images.jpeg", caption="Software Tutorials", use_container_width=True)
+            st.image("images/images.jpeg", caption="Software Tutorials")
         else:
-            st.error("Missing file: images/images.jpeg")
+            st.warning("⚠️ 'images/images.jpeg' not found. Check if the filename is correct on GitHub!")
 
-# NEWS PAGE
 elif selected == "News":
     st.header("LATEST UPDATES 📰")
-    st.write("---")
-    st.info("🚀 **Project Rover:** The chassis assembly is complete. Software integration starting soon!")
-    st.success("✅ **YouTube Update:** Our latest Ubuntu customization guide is now live.")
+    st.info("🚀 **Project Rover:** Chassis assembly is complete. Testing now in Sharjah.")
 
-# YOUTUBE PAGE
 elif selected == "YouTube":
-    st.header("OUR VIDEOS 📺")
-    st.write("---")
-    st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ") # Replace with your link
-    st.write("### Featured Tutorial: Setting up your environment")
+    st.header("CYBERBROS2013 VIDEOS 📺")
+    # Replace with your actual video link
+    st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
-# CONTACT PAGE
 elif selected == "Contact":
     st.header("GET IN TOUCH 📩")
-    st.write("---")
-    
-    # Simple HTML Contact Form
+    st.write("Email us for collaborations or build questions!")
+    # FormSubmit setup
     contact_form = """
     <form action="https://formsubmit.co/your-email@gmail.com" method="POST">
-        <input type="text" name="name" placeholder="Your Name" required style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px;">
-        <input type="email" name="email" placeholder="Your Email" required style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px;">
-        <textarea name="message" placeholder="Your message" required style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px; height: 150px;"></textarea>
-        <button type="submit" style="background-color: #00f2ff; color: #0a0b10; padding: 10px 20px; border: none; border-radius: 5px; margin-top: 10px; font-weight: bold;">Send Message</button>
+        <input type="text" name="name" placeholder="Your Name" required style="width:100%; margin-bottom:10px;">
+        <input type="email" name="email" placeholder="Your Email" required style="width:100%; margin-bottom:10px;">
+        <textarea name="message" placeholder="Message" style="width:100%; height:100px;"></textarea>
+        <button type="submit" style="background:#00f2ff; color:#0a0b10; border:none; padding:10px 20px; font-weight:bold;">Send</button>
     </form>
     """
     st.markdown(contact_form, unsafe_allow_html=True)
