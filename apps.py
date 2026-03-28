@@ -10,26 +10,30 @@ st.set_page_config(page_title="Cyberbros2013 Tech site", page_icon="🤖", layou
 # --- CUSTOM CSS FOR GRADIENT & BOLD TEXT ---
 st.markdown("""
     <style>
-    /* This creates the Blue/Purple Gradient Background */
-    .stApp {
-        background: linear-gradient(135deg, #0a0b10 0%, #1a0b2e 50%, #001a2e 100%);
-        background-attachment: fixed;
+    /* 1. FORCE THE GRADIENT ON EVERY LAYER */
+    .stApp, .stMain, .stHeader, .stAppViewContainer, .stMainBlockContainer {
+        background: linear-gradient(135deg, #0a0b10 0%, #1a0b2e 50%, #001a2e 100%) !important;
+        background-attachment: fixed !important;
     }
 
-    /* This makes all your main Headers Bold and High-Tech looking */
+    /* 2. MAKE ALL HEADERS EXTRA BOLD & CYAN */
     h1, h2, h3 {
-        font-weight: 800 !important;
-        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        letter-spacing: -0.5px;
+        font-weight: 900 !important;
+        font-family: 'Inter', 'Segoe UI', sans-serif;
         color: #00f2ff !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
-    /* Making the normal text easier to read against the dark background */
-    p, li {
-        font-weight: 400;
-        font-size: 1.1rem;
-        color: #e6edf3;
+    /* 3. CLEAN UP THE TEXT */
+    p, li, span {
+        font-weight: 500;
+        color: #e6edf3 !important;
     }
+
+    /* 4. HIDE THE STREAMLIT TOP BAR SHADOW */
+    header {background: transparent !important;}
+    footer {display: none !important;}
     </style>
     """, unsafe_allow_html=True)
 
